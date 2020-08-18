@@ -11,6 +11,18 @@ class TPromise{
         this._state = PromiseState.Pending;
         this._value = null;
         this._reason = null;
+        if (typeof computation === "function") {
+            setTimeout(() =>{
+                try {
+                    computation(
+                        this._fufill.bind(this),
+                        this._reject.bind(this)
+                    );
+                } catch (error) {
+                    
+                }
+            })
+        }
     }
     
 
