@@ -34,3 +34,12 @@ const catchPromise = q.catch((reason) => {
 catchPromise.then((val) => {
     console.log(val);
 })
+
+
+const pThrowError = new TPromise((resolve, reject) => {
+    throw Error("some error");
+});
+
+pThrowError.catch((err) => {
+    console.log(`err is ${err}`);
+});

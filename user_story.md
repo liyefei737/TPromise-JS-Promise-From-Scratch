@@ -29,3 +29,6 @@ a promise either fufills or rejects, have machanism making sure only 1 runs
 
 
 allow .then after .catch
+
+
+when function passed in throws an error, promise rejects

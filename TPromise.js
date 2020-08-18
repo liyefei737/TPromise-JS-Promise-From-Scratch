@@ -23,7 +23,7 @@ class TPromise {
                         this._reject.bind(this)
                     );
                 } catch (error) {
-
+                    this._reject(error);
                 }
             })
         }
