@@ -15,6 +15,7 @@ class TPromise {
         this._reason = null;
         this.thenQueue = []; // support multiple .then on the promise
         this.catchQueue = []; // support multiple .catch on the promise
+        this.finallyQueue = [];
         if (typeof computation === "function") {
             setTimeout(() => {
                 try {
@@ -41,8 +42,10 @@ class TPromise {
         return this.then(undefined, catchFn);
     }
 
-    finally() {
-
+    finally(sideEffectFn) {
+        const newPromise = new TPromise();
+        this.finallyQueue.push([newPromise, sideEffectFn]);
+        return newPromise;
     }
 
     _fufill(value) {
@@ -80,6 +83,13 @@ class TPromise {
         // the first fufill or reject takes precendence
         // the fufills or rejects that follow will get empty array 
         this.thenQueue = [];
+
+        this.finallyQueue.forEach(([childPromise, sideEffectFn]) => {
+            sideEffectFn();
+            childPromise._fufill(this._value);
+        });
+        this.finallyQueue = [];
+
     }
 
     _broadcastRejectedReason() {
@@ -101,11 +111,15 @@ class TPromise {
             }
         })
         this.thenQueue = [];
+
+        this.finallyQueue.forEach(([childPromise, sideEffectFn]) => {
+            sideEffectFn();
+            childPromise._reject(this._value);
+        });
+        this.finallyQueue = [];
+
     }
-
 }
-
-
 
 
 module.exports = TPromise;
