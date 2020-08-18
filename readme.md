@@ -1,7 +1,11 @@
 ### TPromise, Javascript Promise class implemented from scratch
 
 `TPromise.js` -> Promise Class
+
+
 `index.js` -> tests
+
+
 user stories implemented:
 
 A promise is a object with then method
